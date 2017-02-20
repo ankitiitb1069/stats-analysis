@@ -97,39 +97,55 @@
  function indexOfMedianDiffOutliers (arr, threshold) {
    threshold = threshold || 3 // Default threshold of 3 std
    var differencesArr = differences(arr)
+   var medianArr = median(arr)
    var medianDiff = median(differencesArr)
+   var flag = true
+   var index = 0
 
    return arr.reduce(function (res, val, i) {
-     if (isMedianDiffOutlier(threshold, differencesArr[i], medianDiff)) {
-       res.push(i)
+     if (i > 0 && flag) {
+       flag = !isMedianDiffOutlier(threshold, differencesArr[i], medianDiff)
+       index = i
+       if (isMedianDiffOutlier(threshold, differencesArr[i], medianDiff)) {
+         res.push(i)
+       }
+     } else {
+       if (i !== 0) {
+         flag = !(Math.round(Math.abs(arr[index - 1] - arr[i] + 1) / medianDiff) > threshold)
+         if ((Math.round(Math.abs(arr[index - 1] - arr[i])) + 1) / medianDiff > threshold) {
+           res.push(i)
+         }
+       } else {
+         if (!(arr[i] < medianArr + threshold * medianDiff)) {
+           res.push(i)
+         }
+       }
      }
      return res
    }, [])
  }
 
  function filterMedianDiffOutliers (arr, threshold) {
-   threshold = threshold || 3 // Default threshold of 3 std
+   threshold = threshold || 2 // Default threshold of 3 std
    var differencesArr = differences(arr)
-   var medianArr = median(arr);
+   var medianArr = median(arr)
    var medianDiff = median(differencesArr)
-   var flag = true;
-   var index = 0;
-   return arr.filter(function (_, i){
-     if(i>0 && flag){
-         flag = !isMedianDiffOutlier(threshold, differencesArr[i], medianDiff)
-         index = i;
-         return !isMedianDiffOutlier(threshold, differencesArr[i], medianDiff)
+   var flag = true
+   var index = 0
+   return arr.filter(function (_, i) {
+     if (i > 0 && flag) {
+       flag = !isMedianDiffOutlier(threshold, differencesArr[i], medianDiff)
+       index = i
+       return !isMedianDiffOutlier(threshold, differencesArr[i], medianDiff)
+     } else {
+       if (i !== 0) {
+         flag = !(Math.round(Math.abs(arr[index - 1] - arr[i] + 1) / medianDiff) > threshold)
+         return !((Math.round(Math.abs(arr[index - 1] - arr[i])) + 1) / medianDiff > threshold)
+       } else {
+         return arr[i] < medianArr + threshold * medianDiff
        }
-     else{
-       if(i!=0){
-
-         flag = !(Math.round(Math.abs(arr[index-1] - arr[i]+1)/medianDiff) > threshold)
-         return !((Math.round(Math.abs(arr[index-1] - arr[i]))+1)/medianDiff > threshold)
-       }else{
-       return arr[i] < medianArr + threshold*medianDiff;
      }
-     }
-     })
+   })
  }
 
  function filterOutliers (arr, method, threshold) {
@@ -149,18 +165,18 @@
        return indexOfMedianDiffOutliers(arr, threshold)
    }
  }
- 
-module.exports = {
-  stdev: stdev,
-  mean: mean,
-  median: median,
-  MAD: medianAbsoluteDeviation,
-  numSorter: numSorter,
-  outlierMethod: outlierMethod,
-  filterOutliers: filterOutliers,
-  indexOfOutliers: indexOfOutliers,
-  filterMADoutliers: filterMADoutliers,
-  indexOfMADoutliers: indexOfMADoutliers,
-  filterMedianDiffOutliers: filterMedianDiffOutliers,
-  indexOfMedianDiffOutliers: indexOfMedianDiffOutliers
-}
+
+ module.exports = {
+   stdev: stdev,
+   mean: mean,
+   median: median,
+   MAD: medianAbsoluteDeviation,
+   numSorter: numSorter,
+   outlierMethod: outlierMethod,
+   filterOutliers: filterOutliers,
+   indexOfOutliers: indexOfOutliers,
+   filterMADoutliers: filterMADoutliers,
+   indexOfMADoutliers: indexOfMADoutliers,
+   filterMedianDiffOutliers: filterMedianDiffOutliers,
+   indexOfMedianDiffOutliers: indexOfMedianDiffOutliers
+ }

@@ -4,7 +4,7 @@ var stats = require('./stats')
 
 var arrOddLen = [-2, 1, 2, 2, 3, 4, 15]
 var arrEvenLen = [1, 2, 2, 3.4, 2.2, 19, 5.2, 1.3, 3.3, 4.1]
-var randomData = [0.9, 0.74, 0.41, 2518, 0.64, 1.7, 0.63, 0.39,
+var randomData = [0.9, 0.74, 0.41, 2518, 64, 1.7, 0.63, 0.39,
   1.54, 0.277, 2.27, 0.37, 0.56, 0.2005, 3, 2.15, 0.78, 3.15, 2,
   0.29, 0.76, 1.38, 1.09, 2.6, 1.26, 0.83, 0.63, 2.98, 1.4, 0.36,
   0.59, 2.1, 1.58, 0.211, 0.65, 1.18, 2.95, 0.7, 0.22, 0.55, 0.37,
@@ -131,9 +131,9 @@ describe('Filter Outliers', function () {
 
 describe('Index of Outliers', function () {
   assert.equal(stats.indexOfOutliers(randomData).length, 2)
-  assert.equal(stats.indexOfOutliers(randomData, stats.outlierMethod.MAD).length, 10)
+  assert.equal(stats.indexOfOutliers(randomData, stats.outlierMethod.MAD).length, 11)
 
   var arr = [5000, 4900, 1000, 3000, 4400, 1200300, 5000, 5500, 126500]
   assert.equal(stats.indexOfOutliers(arr, stats.outlierMethod.MAD).join(','), '2,5,8')
-  assert.equal(stats.indexOfOutliers(arr, stats.outlierMethod.MedianDiff).join(','), '5,6,8')
+  assert.equal(stats.indexOfOutliers(arr, stats.outlierMethod.MedianDiff).join(','), '5,8')
 })
