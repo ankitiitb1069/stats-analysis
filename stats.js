@@ -126,7 +126,7 @@
  }
 
  function filterMedianDiffOutliers (arr, threshold) {
-   threshold = threshold || 2 // Default threshold of 3 std
+   threshold = threshold || 3 // Default threshold of 3 std
    var differencesArr = differences(arr)
    var medianArr = median(arr)
    var medianDiff = median(differencesArr)
